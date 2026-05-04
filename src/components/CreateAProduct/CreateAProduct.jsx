@@ -1,10 +1,12 @@
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+
 
 const CreateAProduct = () => {
     const { user } = useAuth();
-    const axiosInstance = useAxios();
+    const axiosSecure = useAxiosSecure();
+    console.log(axiosSecure);
 
     const handleCreateAProduct = e => {
         e.preventDefault()
@@ -20,7 +22,7 @@ const CreateAProduct = () => {
             seller_name: user.displayName,
 
         }
-        axiosInstance.post("/products", newProduct)
+        axiosSecure.post("/products", newProduct)
             .then(data => {
                 console.log(data)
                 if (data.data.insertedId) {
