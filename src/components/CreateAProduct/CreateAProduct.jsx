@@ -1,7 +1,11 @@
-import axios from "axios";
 import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
 
 const CreateAProduct = () => {
+    const { user } = useAuth();
+    const axiosInstance = useAxios();
+
     const handleCreateAProduct = e => {
         e.preventDefault()
         const title = e.target.title.value;
@@ -10,9 +14,13 @@ const CreateAProduct = () => {
         const max_price = e.target.max_price.value;
         console.log(title, photo, min_price, max_price);
 
-        const newProduct = { title, photo, min_price, max_price }
+        const newProduct = {
+            title, photo, min_price, max_price,
+            email: user.email,
+            seller_name: user.displayName,
 
-        axios.post("http://localhost:3000/products", newProduct)
+        }
+        axiosInstance.post("/products", newProduct)
             .then(data => {
                 console.log(data)
                 if (data.data.insertedId) {
@@ -24,7 +32,23 @@ const CreateAProduct = () => {
                         timer: 1500
                     });
                 }
+
             })
+
+        // axios.post("http://localhost:3000/products", newProduct)
+        //     .then(data => {
+        //         console.log(data)
+        //         if (data.data.insertedId) {
+        //             Swal.fire({
+        //                 position: "top-end",
+        //                 icon: "success",
+        //                 title: "Your product has been created",
+        //                 showConfirmButton: false,
+        //                 timer: 1500
+        //             });
+        //         }
+        //     })
+
     }
     return (
         <div className="my-10 w-3/6 mx-auto">
